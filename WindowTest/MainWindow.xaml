@@ -1,0 +1,167 @@
+<Window x:Class="WindowTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Window Test"
+        Height="760"
+        Width="1100"
+        WindowStartupLocation="CenterScreen"
+        Background="#EEF3FF">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0"
+                CornerRadius="18"
+                Background="#2F6FED"
+                Padding="20"
+                Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock Text="Window Test"
+                               Foreground="White"
+                               FontSize="28"
+                               FontWeight="Bold"/>
+                    <TextBlock Text="Assessment console powered by strategy-aware question flow"
+                               Foreground="#E6F0FF"
+                               FontSize="14"
+                               Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Strategy:"
+                               Foreground="White"
+                               FontSize="13"
+                               Margin="0,0,8,0"
+                               VerticalAlignment="Center"/>
+                    <ComboBox x:Name="StrategyComboBox"
+                              Width="220"
+                              Height="32"
+                              SelectedIndex="0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1"
+                CornerRadius="18"
+                Background="White"
+                Padding="28"
+                BorderBrush="#DDE7FF"
+                BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,16">
+                    <TextBlock x:Name="MetaLabel"
+                               Text="Question 1 / 8"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               Foreground="#1A1E2D"/>
+                    <TextBlock x:Name="ScoreLabel"
+                               Text="Score: 0"
+                               Margin="24,0,0,0"
+                               FontWeight="SemiBold"
+                               FontSize="14"
+                               Foreground="#2F6FED"/>
+                </StackPanel>
+
+                <Border Grid.Row="1"
+                        Background="#F5F7FB"
+                        CornerRadius="12"
+                        Padding="18"
+                        Margin="0,0,0,18">
+                    <StackPanel>
+                        <TextBlock x:Name="QuestionCategoryText"
+                                   Text="Base Strategy"
+                                   FontSize="13"
+                                   FontWeight="Bold"
+                                   Foreground="#2F6FED"
+                                   Margin="0,0,0,8"/>
+                        <TextBlock x:Name="QuestionText"
+                                   Text="Question text will appear here"
+                                   FontSize="22"
+                                   FontWeight="SemiBold"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Grid.Row="2"
+                           Text="Choose the best answer:"
+                           FontSize="14"
+                           Foreground="#4B5266"
+                           Margin="0,0,0,10"/>
+
+                <ListBox Grid.Row="3"
+                         x:Name="AnswerListBox"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         Padding="0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="#F7F9FF"
+                                    BorderBrush="#DDE7FF"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="14"
+                                    Margin="0,0,0,8">
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap" FontSize="17"/>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
+                    <Button x:Name="SubmitButton"
+                            Width="170"
+                            Height="42"
+                            Content="Submit answer"
+                            Background="#2F6FED"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            Margin="0,0,12,0"/>
+                    <Button x:Name="NextButton"
+                            Width="170"
+                            Height="42"
+                            Content="Next question"
+                            Background="#173E7A"
+                            Foreground="White"
+                            FontWeight="SemiBold"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2"
+                x:Name="ResultPanel"
+                Visibility="Collapsed"
+                Background="#E8F8F0"
+                CornerRadius="16"
+                Margin="0,16,0,0"
+                Padding="18">
+            <StackPanel>
+                <TextBlock Text="Final result"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="#0F6C3B"/>
+                <TextBlock x:Name="ResultSummaryText"
+                           Text=""
+                           FontSize="16"
+                           Margin="0,8,0,0"
+                           Foreground="#123728"
+                           TextWrapping="Wrap"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
