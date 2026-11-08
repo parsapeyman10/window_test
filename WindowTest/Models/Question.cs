@@ -1,133 +1,166 @@
-using System.Windows;
-using System.Windows.Controls;
-using WindowTest.Models;
-using WindowTest.Services;
+<Window x:Class="WindowTest.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Window Test"
+        Width="1100"
+        Height="760"
+        WindowStartupLocation="CenterScreen"
+        Background="#EEF3FF"
+        FontFamily="Segoe UI">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
-namespace WindowTest;
+        <Border Grid.Row="0"
+                CornerRadius="20"
+                Background="#2F6FED"
+                Padding="22"
+                Margin="0,0,0,18">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-public partial class MainWindow : Window
-{
-    private readonly List<Question> _questions = QuestionCatalog.GetQuestions();
-    private readonly Dictionary<string, QuizStrategyModel> _strategyMap = new()
-    {
-        ["Base Quiz"] = QuizStrategyModel.BASE_QUIZ,
-        ["Parsa 52 Line Turn"] = QuizStrategyModel.PARSA_52_LINE_TURN,
-        ["BTC 52 Candle Regime"] = QuizStrategyModel.BTC_52_CANDLE_REGIME,
-        ["Drive Book Master"] = QuizStrategyModel.DRIVE_BOOKS_1_TO_9_UNIFIED_MASTER,
-    };
+                <StackPanel>
+                    <TextBlock Text="Window Test"
+                               FontSize="30"
+                               FontWeight="Bold"
+                               Foreground="White"/>
+                    <TextBlock Text="Modern Windows 10 assessment app"
+                               Margin="0,6,0,0"
+                               FontSize="14"
+                               Foreground="#EAF2FF"/>
+                </StackPanel>
 
-    private QuizSession _session = new();
-    private bool _hasAnswered;
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Strategy:"
+                               Foreground="White"
+                               FontSize="14"
+                               Margin="0,0,10,0"
+                               VerticalAlignment="Center"/>
+                    <ComboBox x:Name="StrategyComboBox"
+                              Width="220"
+                              Height="34"
+                              ItemsSource="{Binding StrategyOptions}"
+                              SelectedItem="{Binding SelectedStrategy, Mode=TwoWay}"
+                              SelectedIndex="0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
 
-    public MainWindow()
-    {
-        InitializeComponent();
-        PopulateStrategyComboBox();
-        StrategyComboBox.SelectionChanged += (_, _) => RefreshStrategySummary();
-        SubmitButton.Click += SubmitAnswer_Click;
-        NextButton.Click += NextQuestion_Click;
-        NextButton.IsEnabled = false;
-        _session = new QuizSession(_questions);
-        RefreshStrategySummary();
-        RenderCurrentQuestion();
-    }
+        <Border Grid.Row="1"
+                Background="White"
+                BorderBrush="#DDE7FF"
+                BorderThickness="1"
+                CornerRadius="20"
+                Padding="28">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-    private void PopulateStrategyComboBox()
-    {
-        StrategyComboBox.ItemsSource = _strategyMap.Keys.ToList();
-        StrategyComboBox.SelectedIndex = 0;
-    }
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,18">
+                    <TextBlock Text="{Binding ProgressText}"
+                               FontWeight="Bold"
+                               FontSize="16"
+                               Foreground="#1A1E2D"/>
+                    <TextBlock Text="{Binding ScoreText}"
+                               Margin="24,0,0,0"
+                               FontWeight="SemiBold"
+                               FontSize="14"
+                               Foreground="#2F6FED"/>
+                </StackPanel>
 
-    private void RefreshStrategySummary()
-    {
-        var selected = StrategyComboBox.SelectedItem?.ToString();
-        if (selected is null) return;
+                <Border Grid.Row="1"
+                        Background="#F6F9FF"
+                        CornerRadius="14"
+                        Padding="18"
+                        Margin="0,0,0,18">
+                    <StackPanel>
+                        <TextBlock Text="{Binding StrategyTitle}"
+                                   Foreground="#2F6FED"
+                                   FontWeight="Bold"
+                                   FontSize="13"
+                                   Margin="0,0,0,8"/>
+                        <TextBlock Text="{Binding CurrentQuestion.Text}"
+                                   FontSize="22"
+                                   FontWeight="SemiBold"
+                                   TextWrapping="Wrap"
+                                   Foreground="#1A1E2D"/>
+                    </StackPanel>
+                </Border>
 
-        var model = _strategyMap[selected];
-        var spec = QuizStrategyCatalog.GetSpec(model);
-        QuestionCategoryText.Text = spec.TitleFa;
-    }
+                <TextBlock Grid.Row="2"
+                           Text="Choose the best answer:"
+                           Foreground="#4B5266"
+                           FontSize="14"
+                           Margin="0,0,0,10"/>
 
-    private void RenderCurrentQuestion()
-    {
-        ResultPanel.Visibility = Visibility.Collapsed;
-        var q = _session.CurrentQuestion;
-        if (q is null)
-        {
-            DisplayFinalResult();
-            return;
-        }
+                <ListBox Grid.Row="3"
+                         x:Name="AnswerListBox"
+                         ItemsSource="{Binding CurrentOptions}"
+                         SelectedIndex="{Binding SelectedAnswerIndex, Mode=TwoWay}"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         Padding="0">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border CornerRadius="12"
+                                    Background="#F7F9FF"
+                                    BorderBrush="#DDE7FF"
+                                    BorderThickness="1"
+                                    Padding="14"
+                                    Margin="0,0,0,8">
+                                <TextBlock Text="{Binding }"
+                                           FontSize="17"
+                                           TextWrapping="Wrap"/>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
-        MetaLabel.Text = $"Question {_session.CurrentIndex + 1} / {_questions.Count}";
-        ScoreLabel.Text = $"Score: {_session.Score}";
-        QuestionText.Text = q.Text;
-        AnswerListBox.ItemsSource = q.Answers;
-        AnswerListBox.SelectedIndex = -1;
-        _hasAnswered = false;
-        SubmitButton.IsEnabled = true;
-        NextButton.IsEnabled = false;
-    }
+                <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,18,0,0">
+                    <Button x:Name="SubmitButton"
+                            Width="180"
+                            Height="42"
+                            Content="Submit answer"
+                            Background="#2F6FED"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            Margin="0,0,12,0"
+                            IsEnabled="{Binding CanSubmit}"/>
+                    <Button x:Name="NextButton"
+                            Width="180"
+                            Height="42"
+                            Content="Next question"
+                            Background="#173E7A"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            IsEnabled="{Binding CanNext}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
 
-    private void SubmitAnswer_Click(object sender, RoutedEventArgs e)
-    {
-        if (_hasAnswered) return;
-
-        var current = _session.CurrentQuestion;
-        if (current is null) return;
-
-        var selected = AnswerListBox.SelectedIndex;
-        if (selected < 0)
-        {
-            MessageBox.Show("Please choose an answer before submitting.", "Window Test", MessageBoxButton.OK, MessageBoxImage.Information);
-            return;
-        }
-
-        _hasAnswered = true;
-        _session.RecordAnswer(selected);
-        SubmitButton.IsEnabled = false;
-        NextButton.IsEnabled = true;
-
-        var isCorrect = selected == current.CorrectIndex;
-        if (isCorrect)
-        {
-            _session.Score += 1;
-            ScoreLabel.Text = $"Score: {_session.Score}";
-            MessageBox.Show("Correct answer. Good work.", "Window Test", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-        else
-        {
-            MessageBox.Show($"Incorrect. Correct answer: {current.Answers[current.CorrectIndex]}", "Window Test", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-    }
-
-    private void NextQuestion_Click(object sender, RoutedEventArgs e)
-    {
-        if (!_session.MoveNext())
-        {
-            DisplayFinalResult();
-            return;
-        }
-
-        RenderCurrentQuestion();
-    }
-
-    private void DisplayFinalResult()
-    {
-        var total = _questions.Count;
-        var percent = total > 0 ? (double)_session.Score / total * 100.0 : 0;
-        var strategyName = StrategyComboBox.SelectedItem?.ToString() ?? "Base Quiz";
-        var profile = QuizStrategyCatalog.GetSpec(_strategyMap[strategyName]);
-
-        ResultSummaryText.Text = $"Final score: {_session.Score} / {total} ({percent:F1}%)\n" +
-                                 $"Strategy: {profile.TitleFa}\n" +
-                                 $"Summary: {profile.SpecialEdgeAdvantageFa}";
-
-        ResultPanel.Visibility = Visibility.Visible;
-        QuestionText.Text = "Test completed";
-        AnswerListBox.ItemsSource = null;
-        MetaLabel.Text = "Completed";
-        ScoreLabel.Text = $"Score: {_session.Score}";
-        SubmitButton.IsEnabled = false;
-        NextButton.IsEnabled = false;
-    }
-}
+        <Border x:Name="ResultBanner"
+                Grid.Row="2"
+                Background="#E8F8F0"
+                CornerRadius="16"
+                Padding="18"
+                Margin="0,16,0,0"
+                Visibility="Collapsed">
+            <TextBlock x:Name="ResultBannerText"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       Foreground="#0F6C3B"
+                       Text="Result"/>
+        </Border>
+    </Grid>
+</Window>

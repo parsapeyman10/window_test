@@ -3,12 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml">
   <Application.Resources>
-    <SolidColorBrush x:Key="PrimaryBrush" Color="#2F6FED"/>
-    <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#173E7A"/>
-    <SolidColorBrush x:Key="PanelBrush" Color="#F5F7FB"/>
-    <SolidColorBrush x:Key="BgBrush" Color="#EEF3FF"/>
-    <SolidColorBrush x:Key="SuccessBrush" Color="#1F9D61"/>
-    <SolidColorBrush x:Key="WarningBrush" Color="#D97900"/>
-    <SolidColorBrush x:Key="TextBrush" Color="#1A1E2D"/>
+    <ResourceDictionary>
+      <SolidColorBrush x:Key="PrimaryBrush" Color="#2F6FED"/>
+      <SolidColorBrush x:Key="PrimaryDarkBrush" Color="#173E7A"/>
+      <SolidColorBrush x:Key="PanelBrush" Color="#F5F7FB"/>
+      <SolidColorBrush x:Key="BackgroundBrush" Color="#EEF3FF"/>
+      <SolidColorBrush x:Key="SuccessBrush" Color="#1F9D61"/>
+      <SolidColorBrush x:Key="WarningBrush" Color="#D97900"/>
+      <SolidColorBrush x:Key="TextBrush" Color="#1A1E2D"/>
+      <SolidColorBrush x:Key="BorderBrush" Color="#DDE7FF"/>
+      <SolidColorBrush x:Key="SoftWhiteBrush" Color="#FFFFFF"/>
+    </ResourceDictionary>
   </Application.Resources>
 </Application>
